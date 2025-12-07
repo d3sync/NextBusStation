@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="NextBusStation.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:NextBusStation.Views"
+    Title="NextBusStation">
+
+    <TabBar>
+        <ShellContent
+            Title="Nearby"
+            ContentTemplate="{DataTemplate views:MapPage}"
+            Route="map">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#xf3c5;" FontFamily="FontAwesomeSolid" Size="24"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        
+        <ShellContent
+            Title="Schedules"
+            ContentTemplate="{DataTemplate views:NotificationSchedulesPage}"
+            Route="schedules">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#xf0f3;" FontFamily="FontAwesomeSolid" Size="24"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        
+        <ShellContent
+            Title="Settings"
+            ContentTemplate="{DataTemplate views:SettingsPage}"
+            Route="settings">
+            <ShellContent.Icon>
+                <FontImageSource Glyph="&#xf013;" FontFamily="FontAwesomeSolid" Size="24"/>
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
+
+</Shell>

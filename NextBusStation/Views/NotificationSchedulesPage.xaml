@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NextBusStation.ViewModels"
+             xmlns:models="clr-namespace:NextBusStation.Models"
+             x:Class="NextBusStation.Views.NotificationSchedulesPage"
+             x:DataType="vm:NotificationSchedulesViewModel"
+             Title="Schedules"
+             BackgroundColor="{StaticResource Background}">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+        <!-- Status Bar -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{StaticResource Primary}" 
+               Padding="15" 
+               CornerRadius="0"
+               HasShadow="True">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Grid.Column="0" 
+                       Text="{Binding StatusMessage}" 
+                       TextColor="{StaticResource TextOnPrimary}"
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <ActivityIndicator Grid.Column="1" 
+                                   IsRunning="{Binding IsLoading}" 
+                                   IsVisible="{Binding IsLoading}" 
+                                   Color="{StaticResource TextOnPrimary}"/>
+            </Grid>
+        </Frame>
+
+        <!-- Monitoring Control -->
+        <Frame Grid.Row="1" 
+               Margin="10,10,10,0" 
+               Padding="20" 
+               CornerRadius="12" 
+               BackgroundColor="{StaticResource Surface}"
+               BorderColor="{StaticResource CardBorder}"
+               HasShadow="True">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="15">
+                <StackLayout Grid.Column="0" VerticalOptions="Center" Spacing="4">
+                    <Label Text="Background Monitoring" 
+                           FontSize="16" 
+                           FontAttributes="Bold" 
+                           TextColor="{StaticResource TextPrimary}"/>
+                    <Label TextColor="{StaticResource TextSecondary}" FontSize="13">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Status: "/>
+                                <Span Text="{Binding IsMonitoring}" FontAttributes="Bold"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <Button Grid.Column="1" 
+                        Text="{Binding IsMonitoring, Converter={StaticResource MonitoringButtonTextConverter}}" 
+                        Command="{Binding ToggleMonitoringCommand}" 
+                        VerticalOptions="Center" 
+                        BackgroundColor="{StaticResource Accent}"
+                        TextColor="{StaticResource TextOnPrimary}"
+                        CornerRadius="20"
+                        Padding="25,10"
+                        FontSize="14"
+                        FontAttributes="Bold"/>
+            </Grid>
+        </Frame>
+
+        <!-- Schedules List -->
+        <CollectionView Grid.Row="2" 
+                        ItemsSource="{Binding Schedules}" 
+                        SelectionMode="None" 
+                        Margin="10,10,10,0">
+            <CollectionView.EmptyView>
+                <StackLayout Padding="20" VerticalOptions="Center">
+                    <Frame Padding="30"
+                           CornerRadius="60"
+                           BackgroundColor="{StaticResource Gray100}"
+                           HasShadow="False"
+                           HorizontalOptions="Center"
+                           Margin="0,20">
+                        <Label Text="[ ]"
+                               FontSize="48"
+                               FontFamily="Courier New"
+                               TextColor="{StaticResource Gray400}"
+                               HorizontalOptions="Center"/>
+                    </Frame>
+                    <Label Text="No schedules yet" 
+                           HorizontalOptions="Center" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}" 
+                           Margin="0,0,0,5"/>
+                    <Label Text="Go to a stop and tap the + button" 
+                           HorizontalOptions="Center" 
+                           FontSize="14" 
+                           TextColor="{StaticResource TextSecondary}"/>
+                </StackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:NotificationSchedule">
+                    <SwipeView Margin="0,0,0,10">
+                        <!-- Swipe Left (from right edge) to Edit -->
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                                <SwipeItemView Invoked="OnEditSwipeItemInvoked">
+                                    <Grid WidthRequest="120"
+                                          BackgroundColor="{StaticResource Info}">
+                                        <Label Text="EDIT ►"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource TextOnInfoColor}" />
+                                    </Grid>
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <!-- Swipe Right (from left edge) to Delete -->
+                        <SwipeView.LeftItems>
+                            <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                                <SwipeItemView Invoked="OnDeleteSwipeItemInvoked">
+                                    <Grid WidthRequest="120"
+                                          BackgroundColor="{StaticResource Error}">
+                                        <Label Text="◄ DELETE"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource TextOnErrorColor}" />
+                                    </Grid>
+                                </SwipeItemView>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+
+
+
+                        <Frame Padding="15" 
+                               CornerRadius="12" 
+                               BackgroundColor="{StaticResource Surface}"
+                               BorderColor="{StaticResource CardBorder}"
+                               HasShadow="True"
+                               Margin="0">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="15">
+
+                                <Switch Grid.Column="0" 
+                                        Grid.Row="0" 
+                                        Grid.RowSpan="4" 
+                                        IsToggled="{Binding IsEnabled}"
+                                        VerticalOptions="Center" 
+                                        OnColor="{StaticResource Accent}"
+                                        ThumbColor="White"
+                                        Toggled="OnScheduleToggled"/>
+
+                                <StackLayout Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="{Binding StopName}" 
+                                           FontSize="16" 
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource TextPrimary}"/>
+
+                                    <Label FontSize="14" TextColor="{StaticResource TextSecondary}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="⏰ "/>
+                                                <Span Text="{Binding StartTime, StringFormat='{0:hh\\:mm}'}" FontAttributes="Bold"/>
+                                                <Span Text=" - " />
+                                                <Span Text="{Binding EndTime, StringFormat='{0:hh\\:mm}'}" FontAttributes="Bold"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label FontSize="12" TextColor="{StaticResource TextSecondary}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="● "/>
+                                                <Span Text="{Binding DaysOfWeekDisplay}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label FontSize="12" TextColor="{StaticResource TextSecondary}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="● "/>
+                                                <Span Text="{Binding ProximityRadius, StringFormat='{0}m'}" FontAttributes="Bold"/>
+                                                <Span Text="  •  Alert ≤ "/>
+                                                <Span Text="{Binding MinMinutesThreshold, StringFormat='{0}min'}" FontAttributes="Bold"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+
+                                <!-- Swipe Hint Icon -->
+                                <Label Grid.Column="2" 
+                                       Grid.Row="0" 
+                                       Grid.RowSpan="4"
+                                       Text="⇄"
+                                       FontSize="20"
+                                       TextColor="{StaticResource Gray400}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Opacity="0.5"/>
+                            </Grid>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Refresh Button -->
+        <Button Grid.Row="3" 
+                Text="⟳ Refresh Schedules"
+                Command="{Binding LoadSchedulesCommand}" 
+                Margin="10" 
+                CornerRadius="25"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="{StaticResource TextOnPrimary}"
+                FontSize="15"
+                FontAttributes="Bold"
+                Padding="0,15"
+                HeightRequest="50"/>
+    </Grid>
+</ContentPage>

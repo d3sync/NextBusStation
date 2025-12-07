@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NextBusStation.ViewModels"
+             x:Class="NextBusStation.Views.EditSchedulePage"
+             x:DataType="vm:EditScheduleViewModel"
+             Title="Edit Schedule"
+             BackgroundColor="{StaticResource Background}">
+    
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            
+            <!-- Header -->
+            <Frame Padding="20"
+                   CornerRadius="12"
+                   BackgroundColor="{StaticResource Primary}"
+                   HasShadow="True"
+                   Margin="0,0,0,10">
+                <StackLayout Spacing="5">
+                    <Label Text="{Binding Schedule.StopName}" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="{StaticResource TextOnPrimary}"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding Schedule.StopCode, StringFormat='Stop Code: {0}'}" 
+                           FontSize="14" 
+                           TextColor="{StaticResource TextOnPrimary}"
+                           Opacity="0.9"
+                           HorizontalOptions="Center"/>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Time Window -->
+            <Frame Padding="20" 
+                   CornerRadius="12"
+                   BackgroundColor="{StaticResource Surface}"
+                   BorderColor="{StaticResource CardBorder}"
+                   HasShadow="True">
+                <StackLayout Spacing="15">
+                    <Label Text="Time Window" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"/>
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray300}"
+                             Margin="0,0,0,5"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <StackLayout Grid.Column="0" Spacing="8">
+                            <Label Text="Start Time"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}"/>
+                            <Frame Padding="10,8"
+                                   CornerRadius="8"
+                                   BackgroundColor="{StaticResource Gray100}"
+                                   BorderColor="{StaticResource Gray300}"
+                                   HasShadow="False">
+                                <TimePicker Time="{Binding StartTime}" 
+                                           Format="HH:mm" 
+                                           FontSize="16"
+                                           TextColor="{StaticResource TextPrimary}"/>
+                            </Frame>
+                        </StackLayout>
+                        <StackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="End Time"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource TextPrimary}"/>
+                            <Frame Padding="10,8"
+                                   CornerRadius="8"
+                                   BackgroundColor="{StaticResource Gray100}"
+                                   BorderColor="{StaticResource Gray300}"
+                                   HasShadow="False">
+                                <TimePicker Time="{Binding EndTime}" 
+                                           Format="HH:mm" 
+                                           FontSize="16"
+                                           TextColor="{StaticResource TextPrimary}"/>
+                            </Frame>
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Days of Week -->
+            <Frame Padding="20" 
+                   CornerRadius="12"
+                   BackgroundColor="{StaticResource Surface}"
+                   BorderColor="{StaticResource CardBorder}"
+                   HasShadow="True">
+                <StackLayout Spacing="15">
+                    <Label Text="Active Days" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"/>
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray300}"
+                             Margin="0,0,0,5"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button Grid.Column="0" 
+                                Text="Weekdays Only" 
+                                Command="{Binding SetWeekdaysCommand}" 
+                                FontSize="13"
+                                BackgroundColor="{StaticResource Info}"
+                                TextColor="{StaticResource TextOnPrimary}"
+                                CornerRadius="8"
+                                Padding="0,10"/>
+                        <Button Grid.Column="1" 
+                                Text="Every Day" 
+                                Command="{Binding SetEverydayCommand}" 
+                                FontSize="13"
+                                BackgroundColor="{StaticResource Info}"
+                                TextColor="{StaticResource TextOnPrimary}"
+                                CornerRadius="8"
+                                Padding="0,10"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*" 
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" 
+                          RowSpacing="12"
+                          Margin="0,10,0,0">
+                        <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding MondayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Monday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                        <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding TuesdayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Tuesday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                        <CheckBox Grid.Row="2" Grid.Column="0" IsChecked="{Binding WednesdayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="Wednesday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                        <CheckBox Grid.Row="3" Grid.Column="0" IsChecked="{Binding ThursdayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="3" Grid.Column="1" Text="Thursday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                        <CheckBox Grid.Row="4" Grid.Column="0" IsChecked="{Binding FridayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="4" Grid.Column="1" Text="Friday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                        <CheckBox Grid.Row="5" Grid.Column="0" IsChecked="{Binding SaturdayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="5" Grid.Column="1" Text="Saturday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                        <CheckBox Grid.Row="6" Grid.Column="0" IsChecked="{Binding SundayEnabled}" Color="{StaticResource Primary}"/>
+                        <Label Grid.Row="6" Grid.Column="1" Text="Sunday" VerticalOptions="Center" TextColor="{StaticResource TextPrimary}" FontSize="15"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Settings -->
+            <Frame Padding="20" 
+                   CornerRadius="12"
+                   BackgroundColor="{StaticResource Surface}"
+                   BorderColor="{StaticResource CardBorder}"
+                   HasShadow="True">
+                <StackLayout Spacing="15">
+                    <Label Text="Notification Settings" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextPrimary}"/>
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray300}"
+                             Margin="0,0,0,5"/>
+                    
+                    <StackLayout Spacing="8">
+                        <Label TextColor="{StaticResource TextPrimary}" FontSize="14">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Proximity Radius: " FontAttributes="Bold"/>
+                                    <Span Text="{Binding ProximityRadius, StringFormat='{0}m'}" 
+                                          TextColor="{StaticResource Primary}"
+                                          FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Slider Value="{Binding ProximityRadius}" 
+                                Minimum="100" 
+                                Maximum="1000"
+                                MinimumTrackColor="{StaticResource Primary}"
+                                MaximumTrackColor="{StaticResource Gray300}"
+                                ThumbColor="{StaticResource Primary}"/>
+                        <Label Text="Distance from stop to trigger notifications" 
+                               FontSize="12" 
+                               TextColor="{StaticResource TextSecondary}"/>
+                    </StackLayout>
+                    
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray200}"
+                             Margin="0,5"/>
+                    
+                    <StackLayout Spacing="8">
+                        <Label TextColor="{StaticResource TextPrimary}" FontSize="14">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Check Interval: " FontAttributes="Bold"/>
+                                    <Span Text="{Binding CheckIntervalMinutes, StringFormat='{0} minutes'}" 
+                                          TextColor="{StaticResource Primary}"
+                                          FontAttributes="Bold"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Slider Value="{Binding CheckIntervalMinutes}" 
+                                Minimum="1" 
+                                Maximum="30"
+                                MinimumTrackColor="{StaticResource Primary}"
+                                MaximumTrackColor="{StaticResource Gray300}"
+                                ThumbColor="{StaticResource Primary}"/>
+                        <Label Text="How often to check for bus arrivals" 
+                               FontSize="12" 
+                               TextColor="{StaticResource TextSecondary}"/>
+                    </StackLayout>
+                    
+                    <BoxView HeightRequest="1" 
+                             BackgroundColor="{StaticResource Gray200}"
+                             Margin="0,5"/>
+                    
+                    <StackLayout Spacing="8">
+                        <StackLayout Orientation="Horizontal" Spacing="5">
+                            <Label Text="Alert Threshold: " 
+                                   TextColor="{StaticResource TextPrimary}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                            <Label Text="🏴‍☠"
+                                   FontFamily="FontAwesomeSolid"
+                                   FontSize="14"
+                                   TextColor="{StaticResource Primary}"
+                                   VerticalOptions="Center"/>
+                            <Label TextColor="{StaticResource Primary}" 
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding MinMinutesThreshold, StringFormat='{0} minutes'}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                        <Slider Value="{Binding MinMinutesThreshold}" 
+                                Minimum="5" 
+                                Maximum="30"
+                                MinimumTrackColor="{StaticResource Primary}"
+                                MaximumTrackColor="{StaticResource Gray300}"
+                                ThumbColor="{StaticResource Primary}"/>
+                        <Label Text="Notify when bus arrives within this time" 
+                               FontSize="12" 
+                               TextColor="{StaticResource TextSecondary}"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+                <Button Grid.Column="0" 
+                        Text="Save Schedule" 
+                        Command="{Binding SaveCommand}" 
+                        BackgroundColor="{StaticResource Success}"
+                        TextColor="{StaticResource TextOnPrimary}"
+                        CornerRadius="10"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Padding="0,15"
+                        HeightRequest="50"
+                        IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding IsSaving}" Value="True">
+                            <Setter Property="Text" Value="Saving..." />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+                <Button Grid.Column="1" 
+                        Text="Cancel" 
+                        Command="{Binding CancelCommand}" 
+                        BackgroundColor="{StaticResource Gray500}"
+                        TextColor="{StaticResource TextOnPrimary}"
+                        CornerRadius="10"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        Padding="0,15"
+                        HeightRequest="50"
+                        IsEnabled="{Binding IsSaving, Converter={StaticResource InvertedBoolConverter}}"/>
+            </Grid>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

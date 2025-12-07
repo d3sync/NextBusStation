@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NextBusStation.ViewModels"
+             xmlns:models="clr-namespace:NextBusStation.Models"
+             x:Class="NextBusStation.Views.StopDetailsPage"
+             x:DataType="vm:StopDetailsViewModel"
+             Title="Stop Details"
+             BackgroundColor="{StaticResource Background}">
+    
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        
+        <!-- Header -->
+        <Frame Grid.Row="0" 
+               BackgroundColor="{StaticResource Primary}"
+               Padding="20"
+               CornerRadius="0"
+               HasShadow="True">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                <StackLayout Grid.Column="0">
+                    <Label Text="{Binding SelectedStop.StopDescrEng}"
+                           TextColor="{StaticResource TextOnPrimary}"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding SelectedStop.StopCode, StringFormat='Stop: {0}'}"
+                           TextColor="{StaticResource TextOnPrimary}"
+                           FontSize="14"
+                           Opacity="0.9"/>
+                </StackLayout>
+                <Button Grid.Column="2"
+                        Text="➕"
+                        Command="{Binding CreateNotificationScheduleCommand}"
+                        BackgroundColor="{StaticResource Accent}"
+                        TextColor="{StaticResource TextOnPrimary}"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        Padding="12"
+                        CornerRadius="20"
+                        WidthRequest="50"
+                        HeightRequest="50"/>
+            </Grid>
+        </Frame>
+        
+        <!-- Status Bar -->
+        <Frame Grid.Row="1"
+               BackgroundColor="{StaticResource Surface}"
+               Padding="15"
+               Margin="10,10,10,0"
+               CornerRadius="10"
+               BorderColor="{StaticResource CardBorder}"
+               HasShadow="True">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Text="{Binding StatusMessage}"
+                       TextColor="{StaticResource TextPrimary}"
+                       FontSize="14"
+                       VerticalOptions="Center"/>
+                <ActivityIndicator Grid.Column="1"
+                                   IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="{StaticResource Primary}"/>
+            </Grid>
+        </Frame>
+        
+        <!-- Arrivals List -->
+        <ScrollView Grid.Row="2">
+            <StackLayout Padding="10" Spacing="15">
+                
+                <Label Text="Next Arrivals" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextPrimary}"
+                       Margin="5,10,5,5"/>
+                
+                <CollectionView ItemsSource="{Binding Arrivals}"
+                                SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <StackLayout Padding="20" VerticalOptions="Center">
+                            <Frame Padding="30"
+                                   CornerRadius="60"
+                                   BackgroundColor="{StaticResource Gray100}"
+                                   HasShadow="False"
+                                   HorizontalOptions="Center"
+                                   Margin="0,20">
+                                <Label Text="🚌"
+                                       FontFamily="FontAwesomeSolid"
+                                       FontSize="32"
+                                       TextColor="{StaticResource Gray400}"
+                                       HorizontalOptions="Center"/>
+                            </Frame>
+                            <Label Text="No upcoming arrivals"
+                                   HorizontalOptions="Center"
+                                   FontSize="16"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:StopArrival">
+                            <Frame Padding="15"
+                                   Margin="0,0,0,10"
+                                   CornerRadius="12"
+                                   BackgroundColor="{StaticResource Surface}"
+                                   BorderColor="{StaticResource CardBorder}"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="15">
+                                    
+                                    <!-- Bus Line Number Badge -->
+                                    <Frame Grid.Column="0"
+                                           Padding="12,8"
+                                           CornerRadius="8"
+                                           BackgroundColor="{StaticResource Primary}"
+                                           HasShadow="False"
+                                           VerticalOptions="Center">
+                                        <Label Text="{Binding LineID}"
+                                               TextColor="{StaticResource TextOnPrimary}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               MinimumWidthRequest="35"
+                                               HorizontalTextAlignment="Center"/>
+                                    </Frame>
+                                    
+                                    <!-- Route Description -->
+                                    <StackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                                        <Label Text="{Binding RouteDescription}"
+                                               FontSize="15"
+                                               TextColor="{StaticResource TextPrimary}"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding RouteCode, StringFormat='Route: {0}'}"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextSecondary}"/>
+                                    </StackLayout>
+                                    
+                                    <!-- Minutes Badge -->
+                                    <Frame Grid.Column="2"
+                                           Padding="12,8"
+                                           CornerRadius="8"
+                                           BackgroundColor="{StaticResource Accent}"
+                                           HasShadow="False"
+                                           VerticalOptions="Center">
+                                        <Label FontSize="16"
+                                               FontAttributes="Bold"
+                                               TextColor="{StaticResource TextOnPrimary}"
+                                               HorizontalOptions="Center">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <Span Text="{Binding MinutesUntilArrival}"/>
+                                                    <Span Text=" min" FontSize="12"/>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+                <Label Text="Routes Serving This Stop" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextPrimary}"
+                       Margin="5,20,5,5"/>
+                
+                <CollectionView ItemsSource="{Binding Routes}"
+                                SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <Label Text="No route information"
+                               HorizontalOptions="Center"
+                               TextColor="{StaticResource TextSecondary}"
+                               FontSize="14"
+                               Margin="20"/>
+                    </CollectionView.EmptyView>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:RouteInfo">
+                            <Frame Padding="15"
+                                   Margin="0,0,0,10"
+                                   CornerRadius="12"
+                                   BackgroundColor="{StaticResource Surface}"
+                                   BorderColor="{StaticResource CardBorder}"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                                    
+                                    <!-- Line Number Badge -->
+                                    <Frame Grid.Column="0"
+                                           Padding="10,6"
+                                           CornerRadius="6"
+                                           BackgroundColor="{StaticResource Secondary}"
+                                           HasShadow="False"
+                                           VerticalOptions="Center">
+                                        <Label Text="{Binding LineID}"
+                                               TextColor="{StaticResource TextOnSecondary}"
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               MinimumWidthRequest="30"
+                                               HorizontalTextAlignment="Center"/>
+                                    </Frame>
+                                    
+                                    <!-- Route Info -->
+                                    <StackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                                        <Label Text="{Binding RouteDescrEng}"
+                                               FontSize="15"
+                                               TextColor="{StaticResource TextPrimary}"
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding LineDescr}"
+                                               FontSize="13"
+                                               TextColor="{StaticResource TextSecondary}"/>
+                                    </StackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+                <!-- Bottom spacing -->
+                <BoxView HeightRequest="10" Color="Transparent"/>
+            </StackLayout>
+        </ScrollView>
+        
+        <!-- Back Button -->
+        <Button Grid.Row="3"
+                Text="🔙 Back"
+                FontFamily="FontAwesomeSolid"
+                Command="{Binding GoBackCommand}"
+                BackgroundColor="{StaticResource Primary}"
+                TextColor="{StaticResource TextOnPrimary}"
+                Margin="10"
+                CornerRadius="25"
+                FontSize="16"
+                FontAttributes="Bold"
+                Padding="0,15"
+                HeightRequest="50"/>
+    </Grid>
+</ContentPage>

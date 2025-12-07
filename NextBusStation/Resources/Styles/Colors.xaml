@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Modern, High Contrast Color Palette -->
+    
+    <!-- Primary Colors (Blue) -->
+    <Color x:Key="Primary">#1976D2</Color>
+    <Color x:Key="PrimaryDark">#0D47A1</Color>
+    <Color x:Key="PrimaryLight">#64B5F6</Color>
+    <Color x:Key="PrimaryDarkText">#0D47A1</Color>
+    
+    <!-- Secondary Colors (Orange/Amber) -->
+    <Color x:Key="Secondary">#FF6F00</Color>
+    <Color x:Key="SecondaryDark">#E65100</Color>
+    <Color x:Key="SecondaryLight">#FFB74D</Color>
+    <Color x:Key="SecondaryDarkText">#E65100</Color>
+    
+    <!-- Background Colors -->
+    <Color x:Key="Background">#F5F7FA</Color>
+    <Color x:Key="BackgroundDark">#121212</Color>
+    <Color x:Key="OffBlack">#1E1E1E</Color>
+    <Color x:Key="Surface">#FFFFFF</Color>
+    <Color x:Key="SurfaceDark">#1E1E1E</Color>
+    
+    <!-- Text Colors (High Contrast) -->
+    <Color x:Key="TextPrimary">#1A1A1A</Color>
+    <Color x:Key="TextSecondary">#666666</Color>
+    <Color x:Key="TextDisabled">#AAAAAA</Color>
+    <Color x:Key="TextOnPrimary">#FFFFFF</Color>
+    <Color x:Key="TextOnSecondary">#FFFFFF</Color>
+    <Color x:Key="TextOnAccent">#FFFFFF</Color>
+    
+    <!-- Accent Colors -->
+    <Color x:Key="Accent">#00C853</Color>
+    <Color x:Key="AccentDark">#00A843</Color>
+    <Color x:Key="MidnightBlue">#191970</Color>
+    <Color x:Key="Magenta">#E91E63</Color>
+    <Color x:Key="Error">#D32F2F</Color>
+    <Color x:Key="Warning">#FFA000</Color>
+    <Color x:Key="WarningLight">#FFF3E0</Color>
+    <Color x:Key="Info">#0288D1</Color>
+    <Color x:Key="Success">#00C853</Color>
+    
+    <!-- Border Colors -->
+    <Color x:Key="BorderColor">#E0E0E0</Color>
+    <Color x:Key="BorderColorDark">#424242</Color>
+    
+    <!-- Card Colors -->
+    <Color x:Key="CardBackground">#FFFFFF</Color>
+    <Color x:Key="CardBorder">#E8EAED</Color>
+    
+    <!-- Status Colors -->
+    <Color x:Key="ActiveGreen">#00C853</Color>
+    <Color x:Key="InactiveGray">#9E9E9E</Color>
+    
+    <!-- Gray Scale -->
+    <Color x:Key="Gray100">#F8F9FA</Color>
+    <Color x:Key="Gray200">#E8EAED</Color>
+    <Color x:Key="Gray300">#DADCE0</Color>
+    <Color x:Key="Gray400">#BDC1C6</Color>
+    <Color x:Key="Gray500">#9AA0A6</Color>
+    <Color x:Key="Gray600">#80868B</Color>
+    <Color x:Key="Gray700">#5F6368</Color>
+    <Color x:Key="Gray800">#3C4043</Color>
+    <Color x:Key="Gray900">#202124</Color>
+    <Color x:Key="Gray950">#121212</Color>
+    
+    <!-- Legacy compatibility -->
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="Black">#000000</Color>
+
+</ResourceDictionary>
