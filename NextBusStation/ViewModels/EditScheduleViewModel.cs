@@ -92,7 +92,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
         if (Schedule == null)
         {
             System.Diagnostics.Debug.WriteLine("? Cannot save: Schedule is null");
-            await Shell.Current.DisplayAlert("Error", "Schedule data is missing", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", "Schedule data is missing", "OK");
             return;
         }
         
@@ -100,14 +100,14 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
         if (!MondayEnabled && !TuesdayEnabled && !WednesdayEnabled && !ThursdayEnabled && 
             !FridayEnabled && !SaturdayEnabled && !SundayEnabled)
         {
-            await Shell.Current.DisplayAlert("Validation Error", "Please select at least one day", "OK");
+            await Shell.Current.DisplayAlertAsync("Validation Error", "Please select at least one day", "OK");
             return;
         }
         
         // Validate time range
         if (EndTime <= StartTime)
         {
-            await Shell.Current.DisplayAlert("Validation Error", "End time must be after start time", "OK");
+            await Shell.Current.DisplayAlertAsync("Validation Error", "End time must be after start time", "OK");
             return;
         }
         
@@ -142,7 +142,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
             System.Diagnostics.Debug.WriteLine($"   Schedule ID: {Schedule.Id}");
             
             // Show success message
-            await Shell.Current.DisplayAlert(
+            await Shell.Current.DisplayAlertAsync(
                 "Success", 
                 $"Schedule for {Schedule.StopName} saved successfully!", 
                 "OK");
@@ -155,7 +155,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
             System.Diagnostics.Debug.WriteLine($"   Message: {ex.Message}");
             System.Diagnostics.Debug.WriteLine($"   Stack: {ex.StackTrace}");
             
-            await Shell.Current.DisplayAlert(
+            await Shell.Current.DisplayAlertAsync(
                 "Error", 
                 $"Failed to save schedule: {ex.Message}", 
                 "OK");
@@ -178,7 +178,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
         
         if (hasChanges)
         {
-            var confirm = await Shell.Current.DisplayAlert(
+            var confirm = await Shell.Current.DisplayAlertAsync(
                 "Unsaved Changes",
                 "You have unsaved changes. Are you sure you want to cancel?",
                 "Yes, Cancel",

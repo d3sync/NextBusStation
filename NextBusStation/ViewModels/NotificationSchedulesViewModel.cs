@@ -120,7 +120,7 @@ public partial class NotificationSchedulesViewModel : ObservableObject
     [RelayCommand]
     public async Task DeleteScheduleAsync(NotificationSchedule schedule)
     {
-        bool confirm = await Shell.Current.DisplayAlert(
+        bool confirm = await Shell.Current.DisplayAlertAsync(
             "Delete Schedule",
             $"Are you sure you want to delete the schedule for {schedule.StopName}?",
             "Delete",
@@ -168,7 +168,7 @@ public partial class NotificationSchedulesViewModel : ObservableObject
             // Revert the change in UI
             schedule.IsEnabled = !schedule.IsEnabled;
             
-            await Shell.Current.DisplayAlert("Error", 
+            await Shell.Current.DisplayAlertAsync("Error", 
                 $"Failed to update schedule: {ex.Message}", "OK");
         }
     }
@@ -186,7 +186,7 @@ public partial class NotificationSchedulesViewModel : ObservableObject
         {
             if (!Schedules.Any(s => s.IsEnabled))
             {
-                await Shell.Current.DisplayAlert(
+                await Shell.Current.DisplayAlertAsync(
                     "No Active Schedules",
                     "Please enable at least one schedule before starting monitoring.",
                     "OK");

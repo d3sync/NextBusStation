@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
@@ -12,10 +12,10 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>NextBusStation</ApplicationTitle>
+		<ApplicationTitle>NearByBusStop</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.nextbusstation</ApplicationId>
+		<ApplicationId>com.d3sync.nextbusstation</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -28,6 +28,10 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<AssemblyTitle>NearByBusStop</AssemblyTitle>
+		
+		<!-- Enable compiled bindings with Source for better performance -->
+		<MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -49,6 +53,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="NextBusStation_new.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AathifMahir.Maui.MauiIcons.Core" Version="5.0.0" />
 		<PackageReference Include="AathifMahir.Maui.MauiIcons.FontAwesome" Version="5.0.0" />
 		<PackageReference Include="AathifMahir.Maui.MauiIcons.Material" Version="5.0.0" />
@@ -60,7 +68,6 @@
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="13.0.0" />
-		<PackageReference Include="System.Drawing.Common" Version="10.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
