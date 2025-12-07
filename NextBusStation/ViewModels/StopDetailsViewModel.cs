@@ -177,7 +177,7 @@ public partial class StopDetailsViewModel : ObservableObject, IQueryAttributable
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"? [Create Schedule] Error: {ex.Message}");
-            await Shell.Current.DisplayAlert("Error", $"Failed to create schedule: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"Failed to create schedule: {ex.Message}", "OK");
         }
     }
     

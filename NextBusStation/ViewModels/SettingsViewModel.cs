@@ -85,7 +85,7 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public async Task ResetCategoryAsync(string category)
     {
-        bool confirm = await Shell.Current.DisplayAlert(
+        bool confirm = await Shell.Current.DisplayAlertAsync(
             "Reset Category",
             $"Reset all settings in '{category}' to defaults?",
             "Reset",
@@ -102,7 +102,7 @@ public partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     public async Task ResetAllAsync()
     {
-        bool confirm = await Shell.Current.DisplayAlert(
+        bool confirm = await Shell.Current.DisplayAlertAsync(
             "Reset All Settings",
             "Reset ALL settings to factory defaults? This cannot be undone.",
             "Reset All",

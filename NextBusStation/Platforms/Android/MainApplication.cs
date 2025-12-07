@@ -27,6 +27,7 @@ namespace NextBusStation
 
         private void CreateNotificationChannel()
         {
+#pragma warning disable CA1416 // Validate platform compatibility - already guarded by version check
             if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O)
             {
                 var channel = new NotificationChannel(
@@ -45,6 +46,7 @@ namespace NextBusStation
                 
                 System.Diagnostics.Debug.WriteLine("📢 Notification channel 'bus_arrivals' created");
             }
+#pragma warning restore CA1416
         }
     }
 }
