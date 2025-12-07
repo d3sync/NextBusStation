@@ -34,6 +34,7 @@ public static class SettingsKeys
     public const string DefaultProximityRadius = "DefaultProximityRadius";
     public const string DefaultCheckInterval = "DefaultCheckInterval";
     public const string DefaultMinutesThreshold = "DefaultMinutesThreshold";
+    public const string MaxBusesInNotification = "MaxBusesInNotification";
     public const string DefaultStartTime = "DefaultStartTime";
     public const string DefaultEndTime = "DefaultEndTime";
     
@@ -60,6 +61,7 @@ public static class SettingsKeys
     public const string WifiOnlyUpdates = "WifiOnlyUpdates";
     
     public const string DebugMode = "DebugMode";
+    public const string ShowDebugFeatures = "ShowDebugFeatures";
     public const string LogLevel = "LogLevel";
     public const string ShowStopCodes = "ShowStopCodes";
 }

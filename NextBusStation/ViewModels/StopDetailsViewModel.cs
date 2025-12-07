@@ -139,31 +139,46 @@ public partial class StopDetailsViewModel : ObservableObject, IQueryAttributable
         
         StopAutoRefresh();
         
-        await _settingsService.InitializeDefaultSettingsAsync();
-        
-        var schedule = new NotificationSchedule
+        try
         {
-            StopCode = SelectedStop.StopCode,
-            StopName = SelectedStop.StopDescrEng ?? SelectedStop.StopDescr,
-            StartTime = _settingsService.GetDefaultStartTime(),
-            EndTime = _settingsService.GetDefaultEndTime(),
-            ProximityRadius = _settingsService.GetDefaultProximityRadius(),
-            CheckIntervalSeconds = _settingsService.GetDefaultCheckInterval(),
-            MinMinutesThreshold = _settingsService.GetDefaultMinutesThreshold(),
-            MondayEnabled = true,
-            TuesdayEnabled = true,
-            WednesdayEnabled = true,
-            ThursdayEnabled = true,
-            FridayEnabled = true
-        };
-        
-        var navigationParameter = new Dictionary<string, object>
+            System.Diagnostics.Debug.WriteLine($"?? [Create Schedule] Creating schedule for {SelectedStop.StopDescr} ({SelectedStop.StopCode})");
+            System.Diagnostics.Debug.WriteLine($"   Stop location: {SelectedStop.StopLat:F6}, {SelectedStop.StopLng:F6}");
+            
+            // IMPORTANT: Save the stop to database so monitoring can find its coordinates
+            await _databaseService.SaveStopAsync(SelectedStop);
+            System.Diagnostics.Debug.WriteLine($"? [Create Schedule] Stop saved to database");
+            
+            await _settingsService.InitializeDefaultSettingsAsync();
+            
+            var schedule = new NotificationSchedule
+            {
+                StopCode = SelectedStop.StopCode,
+                StopName = SelectedStop.StopDescrEng ?? SelectedStop.StopDescr,
+                StartTime = _settingsService.GetDefaultStartTime(),
+                EndTime = _settingsService.GetDefaultEndTime(),
+                ProximityRadius = _settingsService.GetDefaultProximityRadius(),
+                CheckIntervalSeconds = _settingsService.GetDefaultCheckInterval(),
+                MinMinutesThreshold = _settingsService.GetDefaultMinutesThreshold(),
+                MondayEnabled = true,
+                TuesdayEnabled = true,
+                WednesdayEnabled = true,
+                ThursdayEnabled = true,
+                FridayEnabled = true
+            };
+            
+            var navigationParameter = new Dictionary<string, object>
+            {
+                { "Schedule", schedule },
+                { "IsNew", true }
+            };
+            
+            await Shell.Current.GoToAsync("editschedule", navigationParameter);
+        }
+        catch (Exception ex)
         {
-            { "Schedule", schedule },
-            { "IsNew", true }
-        };
-        
-        await Shell.Current.GoToAsync("editschedule", navigationParameter);
+            System.Diagnostics.Debug.WriteLine($"? [Create Schedule] Error: {ex.Message}");
+            await Shell.Current.DisplayAlert("Error", $"Failed to create schedule: {ex.Message}", "OK");
+        }
     }
     
     private void StartAutoRefresh()

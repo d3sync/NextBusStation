@@ -17,6 +17,9 @@ public class SettingsService
     {
         await _databaseService.InitializeAsync();
         
+        // First, clean up any duplicate settings
+        await CleanupDuplicateSettingsAsync();
+        
         var defaultSettings = new List<AppSettings>
         {
             new() { Key = SettingsKeys.DefaultProximityRadius, Value = "500", Category = SettingsCategories.NotificationDefaults, 
@@ -30,6 +33,10 @@ public class SettingsService
             new() { Key = SettingsKeys.DefaultMinutesThreshold, Value = "10", Category = SettingsCategories.NotificationDefaults,
                 DisplayName = "Default Minutes Threshold", Description = "Notify when bus is within X minutes",
                 DataType = "int", MinValue = "5", MaxValue = "30", DefaultValue = "10" },
+            
+            new() { Key = SettingsKeys.MaxBusesInNotification, Value = "3", Category = SettingsCategories.NotificationDefaults,
+                DisplayName = "Max Buses per Notification", Description = "Show up to X buses in each notification",
+                DataType = "int", MinValue = "1", MaxValue = "10", DefaultValue = "3" },
             
             new() { Key = SettingsKeys.DefaultStartTime, Value = "17:40", Category = SettingsCategories.NotificationDefaults,
                 DisplayName = "Default Start Time", Description = "Default monitoring start time",
@@ -99,6 +106,10 @@ public class SettingsService
                 DisplayName = "Debug Mode", Description = "Enable debug logging",
                 DataType = "bool", DefaultValue = "false" },
             
+            new() { Key = SettingsKeys.ShowDebugFeatures, Value = "false", Category = SettingsCategories.Advanced,
+                DisplayName = "Show Debug Features", Description = "Show test mode and debug buttons in the app",
+                DataType = "bool", DefaultValue = "false" },
+            
             new() { Key = SettingsKeys.LogLevel, Value = "Info", Category = SettingsCategories.Advanced,
                 DisplayName = "Log Level", Description = "Logging detail level",
                 DataType = "string", DefaultValue = "Info" }
@@ -119,7 +130,28 @@ public class SettingsService
     private async Task LoadCacheAsync()
     {
         var allSettings = await GetAllSettingsAsync();
-        _cachedSettings = allSettings.ToDictionary(s => s.Key, s => s.Value);
+        
+        // Clear existing cache
+        _cachedSettings.Clear();
+        
+        // Group by Key and take only the most recently updated one to handle duplicates
+        var distinctSettings = allSettings
+            .GroupBy(s => s.Key)
+            .Select(g => g.OrderByDescending(s => s.UpdatedAt).First());
+        
+        foreach (var setting in distinctSettings)
+        {
+            _cachedSettings[setting.Key] = setting.Value;
+        }
+        
+        System.Diagnostics.Debug.WriteLine($"?? [Settings] Loaded {_cachedSettings.Count} settings into cache");
+        
+        // Log if duplicates were found
+        var duplicateCount = allSettings.Count - _cachedSettings.Count;
+        if (duplicateCount > 0)
+        {
+            System.Diagnostics.Debug.WriteLine($"?? [Settings] Found and resolved {duplicateCount} duplicate setting(s)");
+        }
     }
     
     public async Task<AppSettings?> GetSettingAsync(string key)
@@ -270,6 +302,9 @@ public class SettingsService
     public int GetDefaultMinutesThreshold() => 
         _cachedSettings.TryGetValue(SettingsKeys.DefaultMinutesThreshold, out var val) ? int.Parse(val) : 10;
     
+    public int GetMaxBusesInNotification() => 
+        _cachedSettings.TryGetValue(SettingsKeys.MaxBusesInNotification, out var val) ? int.Parse(val) : 3;
+    
     public TimeSpan GetDefaultStartTime() => 
         _cachedSettings.TryGetValue(SettingsKeys.DefaultStartTime, out var val) ? TimeSpan.Parse(val) : new TimeSpan(17, 40, 0);
     
@@ -284,4 +319,36 @@ public class SettingsService
     
     public bool GetAutoStartMonitoring() => 
         _cachedSettings.TryGetValue(SettingsKeys.AutoStartMonitoring, out var val) ? bool.Parse(val) : true;
+    
+    public bool GetShowDebugFeatures() => 
+        _cachedSettings.TryGetValue(SettingsKeys.ShowDebugFeatures, out var val) ? bool.Parse(val) : false;
+    
+    private async Task CleanupDuplicateSettingsAsync()
+    {
+        try
+        {
+            var allSettings = await GetAllSettingsAsync();
+            var duplicateGroups = allSettings
+                .GroupBy(s => s.Key)
+                .Where(g => g.Count() > 1);
+            
+            foreach (var group in duplicateGroups)
+            {
+                var settingsToDelete = group.OrderByDescending(s => s.UpdatedAt).Skip(1);
+                
+                System.Diagnostics.Debug.WriteLine($"?? [Cleanup] Found {group.Count()} duplicates for key '{group.Key}' - keeping most recent");
+                
+                var db = await _databaseService.GetDatabaseConnectionAsync();
+                foreach (var setting in settingsToDelete)
+                {
+                    await db.DeleteAsync(setting);
+                    System.Diagnostics.Debug.WriteLine($"   ? Deleted duplicate: ID={setting.Id}, Value={setting.Value}, Updated={setting.UpdatedAt}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"? [Cleanup] Error cleaning duplicates: {ex.Message}");
+        }
+    }
 }

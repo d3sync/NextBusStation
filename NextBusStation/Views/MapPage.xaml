@@ -95,14 +95,21 @@
                                TextColor="{StaticResource TextPrimary}"
                                FontAttributes="Bold"
                                Margin="0,0,0,5"/>
+                        <Label Text="Tap 'Find Stops' to search for nearby bus stops"
+                               HorizontalOptions="Center"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}"
+                               Margin="0,0,0,20"
+                               IsVisible="{Binding ShowDebugFeatures, Converter={StaticResource InvertedBoolConverter}}"/>
                         <Label Text="Tap 'Find Stops' or enable Test Mode"
                                HorizontalOptions="Center"
                                FontSize="14"
                                TextColor="{StaticResource TextSecondary}"
-                               Margin="0,0,0,20"/>
+                               Margin="0,0,0,20"
+                               IsVisible="{Binding ShowDebugFeatures}"/>
                         <Button Text="Enable Test Mode (Athens)"
                                 Command="{Binding ToggleTestModeCommand}"
-                                IsVisible="{Binding UseTestLocation, Converter={StaticResource InvertedBoolConverter}}"
+                                IsVisible="{Binding ShowDebugFeatures}"
                                 BackgroundColor="{StaticResource Warning}"
                                 TextColor="{StaticResource TextOnPrimary}"
                                 HorizontalOptions="Center"
@@ -206,7 +213,8 @@
                     Padding="20,0"
                     FontSize="14"
                     FontAttributes="Bold"
-                    HeightRequest="50"/>
+                    HeightRequest="50"
+                    IsVisible="{Binding ShowDebugFeatures}"/>
         </Grid>
     </Grid>
 </ContentPage>

@@ -115,7 +115,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
         
         try
         {
-            System.Diagnostics.Debug.WriteLine($"?? Saving schedule for {Schedule.StopName}...");
+            System.Diagnostics.Debug.WriteLine($"?? [Save Schedule] Saving schedule for {Schedule.StopName}...");
             
             Schedule.StartTime = StartTime;
             Schedule.EndTime = EndTime;
@@ -138,7 +138,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
             
             var result = await _databaseService.SaveScheduleAsync(Schedule);
             
-            System.Diagnostics.Debug.WriteLine($"? Schedule saved successfully (Result: {result})");
+            System.Diagnostics.Debug.WriteLine($"? [Save Schedule] Schedule saved successfully (Result: {result})");
             System.Diagnostics.Debug.WriteLine($"   Schedule ID: {Schedule.Id}");
             
             // Show success message
@@ -151,7 +151,7 @@ public partial class EditScheduleViewModel : ObservableObject, IQueryAttributabl
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"? Error saving schedule:");
+            System.Diagnostics.Debug.WriteLine($"? [Save Schedule] Error saving schedule:");
             System.Diagnostics.Debug.WriteLine($"   Message: {ex.Message}");
             System.Diagnostics.Debug.WriteLine($"   Stack: {ex.StackTrace}");
             

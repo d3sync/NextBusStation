@@ -138,11 +138,22 @@ public partial class NotificationSchedulesViewModel : ObservableObject
     {
         try
         {
-            System.Diagnostics.Debug.WriteLine($"?? Saving schedule toggle: {schedule.StopName} - Enabled: {schedule.IsEnabled}");
+            System.Diagnostics.Debug.WriteLine($"?? [Schedule Toggle] Saving schedule toggle: {schedule.StopName} - Enabled: {schedule.IsEnabled}");
             
             await _databaseService.SaveScheduleAsync(schedule);
             
-            System.Diagnostics.Debug.WriteLine($"? Schedule toggle saved");
+            System.Diagnostics.Debug.WriteLine($"? [Schedule Toggle] Schedule toggle saved");
+            
+            // Check if we should start monitoring when enabling a schedule
+            if (schedule.IsEnabled && !_monitoringService.IsMonitoring)
+            {
+                var autoStart = await _settingsService.GetValueAsync(Models.SettingsKeys.AutoStartMonitoring, true);
+                if (autoStart)
+                {
+                    System.Diagnostics.Debug.WriteLine($"?? [Schedule Toggle] Auto-starting monitoring...");
+                    await _monitoringService.StartMonitoringAsync();
+                }
+            }
             
             // Update monitoring status without full reload
             IsMonitoring = _monitoringService.IsMonitoring;
@@ -152,7 +163,7 @@ public partial class NotificationSchedulesViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"? Error toggling schedule: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"? [Schedule Toggle] Error toggling schedule: {ex.Message}");
             
             // Revert the change in UI
             schedule.IsEnabled = !schedule.IsEnabled;

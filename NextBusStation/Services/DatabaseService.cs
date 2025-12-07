@@ -132,4 +132,26 @@ public class DatabaseService
             await _database!.UpdateAsync(schedule);
         }
     }
+    
+    public async Task<BusStop?> EnsureStopExistsAsync(string stopCode, OasaApiService oasaService)
+    {
+        await InitializeAsync();
+        
+        // First check if stop exists in database
+        var existingStop = await GetStopAsync(stopCode);
+        if (existingStop != null && existingStop.StopLat != 0 && existingStop.StopLng != 0)
+        {
+            System.Diagnostics.Debug.WriteLine($"? [EnsureStop] Stop {stopCode} already in database with coordinates");
+            return existingStop;
+        }
+        
+        System.Diagnostics.Debug.WriteLine($"?? [EnsureStop] Stop {stopCode} not in database or missing coordinates - fetching from API...");
+        
+        // If not, we need to fetch it somehow - but we can't without coordinates
+        // This is a limitation - we need the stop to be saved when the schedule is created
+        System.Diagnostics.Debug.WriteLine($"? [EnsureStop] Cannot fetch stop without initial coordinates");
+        System.Diagnostics.Debug.WriteLine($"   ?? The stop must be saved from the map/search when creating the schedule");
+        
+        return null;
+    }
 }

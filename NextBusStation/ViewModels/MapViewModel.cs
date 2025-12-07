@@ -31,6 +31,9 @@ public partial class MapViewModel : ObservableObject
     [ObservableProperty]
     private bool _showMap = false;
     
+    [ObservableProperty]
+    private bool _showDebugFeatures = false;
+    
     public MapViewModel(OasaApiService oasaService, LocationService locationService, DatabaseService databaseService, SettingsService settingsService)
     {
         _oasaService = oasaService;
@@ -49,7 +52,7 @@ public partial class MapViewModel : ObservableObject
         StatusMessage = "Getting location...";
         
         System.Diagnostics.Debug.WriteLine("=================================================");
-        System.Diagnostics.Debug.WriteLine("?? MapViewModel: Starting LoadNearbyStops");
+        System.Diagnostics.Debug.WriteLine("??? MapViewModel: Starting LoadNearbyStops");
         System.Diagnostics.Debug.WriteLine($"   Test mode: {UseTestLocation}");
         
         try
@@ -57,7 +60,9 @@ public partial class MapViewModel : ObservableObject
             // Get max stops from settings
             await _settingsService.InitializeDefaultSettingsAsync();
             var maxStops = _settingsService.GetMaxNearbyStops();
+            ShowDebugFeatures = _settingsService.GetShowDebugFeatures();
             System.Diagnostics.Debug.WriteLine($"   ?? Max stops setting: {maxStops}");
+            System.Diagnostics.Debug.WriteLine($"   ?? Show debug features: {ShowDebugFeatures}");
             
             Location? location;
             
@@ -162,5 +167,20 @@ public partial class MapViewModel : ObservableObject
     public void ToggleMapView()
     {
         ShowMap = !ShowMap;
+    }
+    
+    [RelayCommand]
+    public async Task RefreshDebugSettingAsync()
+    {
+        try
+        {
+            await _settingsService.InitializeDefaultSettingsAsync();
+            ShowDebugFeatures = _settingsService.GetShowDebugFeatures();
+            System.Diagnostics.Debug.WriteLine($"?? [MapViewModel] Debug features: {ShowDebugFeatures}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"? [MapViewModel] Error refreshing debug setting: {ex.Message}");
+        }
     }
 }

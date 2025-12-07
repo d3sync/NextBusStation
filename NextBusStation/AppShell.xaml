@@ -12,7 +12,7 @@
             ContentTemplate="{DataTemplate views:MapPage}"
             Route="map">
             <ShellContent.Icon>
-                <FontImageSource Glyph="&#xf3c5;" FontFamily="FontAwesomeSolid" Size="24"/>
+                <FontImageSource Glyph="🚏" FontFamily="FontAwesomeSolid" Size="24"/>
             </ShellContent.Icon>
         </ShellContent>
         
@@ -21,7 +21,7 @@
             ContentTemplate="{DataTemplate views:NotificationSchedulesPage}"
             Route="schedules">
             <ShellContent.Icon>
-                <FontImageSource Glyph="&#xf0f3;" FontFamily="FontAwesomeSolid" Size="24"/>
+                <FontImageSource Glyph="⏰" FontFamily="FontAwesomeSolid" Size="24"/>
             </ShellContent.Icon>
         </ShellContent>
         
@@ -30,7 +30,7 @@
             ContentTemplate="{DataTemplate views:SettingsPage}"
             Route="settings">
             <ShellContent.Icon>
-                <FontImageSource Glyph="&#xf013;" FontFamily="FontAwesomeSolid" Size="24"/>
+                <FontImageSource Glyph="⚙️" FontFamily="FontAwesomeSolid" Size="24"/>
             </ShellContent.Icon>
         </ShellContent>
     </TabBar>

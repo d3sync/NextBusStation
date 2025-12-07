@@ -28,6 +28,9 @@ public partial class MapPage : ContentPage
     {
         base.OnAppearing();
         
+        // Refresh debug features setting in case it was changed in settings
+        await _viewModel.RefreshDebugSettingCommand.ExecuteAsync(null);
+        
         if (_viewModel.NearbyStops.Count == 0)
         {
             await _viewModel.LoadNearbyStopsCommand.ExecuteAsync(null);

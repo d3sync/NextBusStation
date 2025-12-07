@@ -68,6 +68,13 @@ public partial class SettingsViewModel : ObservableObject
         {
             await _settingsService.SaveSettingAsync(setting);
             StatusMessage = $"{setting.DisplayName} updated";
+            
+            // If ShowDebugFeatures was changed, reload the cache
+            if (setting.Key == SettingsKeys.ShowDebugFeatures)
+            {
+                await _settingsService.InitializeDefaultSettingsAsync();
+                System.Diagnostics.Debug.WriteLine($"?? [Settings] Debug features toggled: {setting.Value}");
+            }
         }
         catch (Exception ex)
         {
