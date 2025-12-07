@@ -53,6 +53,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="NextBusStation_new.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AathifMahir.Maui.MauiIcons.Core" Version="5.0.0" />
 		<PackageReference Include="AathifMahir.Maui.MauiIcons.FontAwesome" Version="5.0.0" />
 		<PackageReference Include="AathifMahir.Maui.MauiIcons.Material" Version="5.0.0" />
